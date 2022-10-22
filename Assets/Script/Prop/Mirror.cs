@@ -4,6 +4,8 @@ using UnityEngine;
 using UniRx;
 using System.Threading;
 using System.Threading.Tasks;
+using static UnityEditor.Experimental.GraphView.GraphView;
+
 public class Mirror : MonoBehaviour
 {
     public Vector2 Normal;
@@ -53,7 +55,7 @@ public class Mirror : MonoBehaviour
         Reflected = false;
     }
 
-    public async Task ReflectShoot(Vector2 direction)
+    public async Task ReflectShoot(Vector2 direction,int count)
     {
         if (!ShootReflected && (direction == EnableVector1 || direction == EnableVector2))
         {
@@ -64,24 +66,34 @@ public class Mirror : MonoBehaviour
             {
                 ShootReflected = true;
                 Debug.DrawLine(transform.position, hit.point, Color.red);
-                await hit.collider.GetComponent<Mirror>().ReflectShoot(direction);
+                Player.instance.lineRenderer.positionCount = count+1;
+                Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
+                await hit.collider.GetComponent<Mirror>().ReflectShoot(direction, ++count);
             }
             else if (hit.collider && hit.collider.CompareTag("Ghost"))
             {
                 ShootReflected = true;
                 Debug.DrawLine(transform.position, hit.point, Color.red);
+                Player.instance.lineRenderer.positionCount = count+1;
+                Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
                 await hit.collider.GetComponent<Ghost>().Dead();
             }
             else if (hit.collider && hit.collider.CompareTag("Player"))
             {
                 ShootReflected = true;
                 Debug.DrawLine(transform.position, hit.point, Color.red);
+                Player.instance.lineRenderer.positionCount = count + 1;
+                Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
                 hit.collider.GetComponent<Player>().Dead();
             }
             else
             {
                 Debug.DrawLine(transform.position, direction * 10000f, Color.red);
+                Player.instance.lineRenderer.positionCount = count + 1;
+                Player.instance.lineRenderer.SetPosition(count, this.transform.localPosition + (Vector3)direction * 10f);
             }
+            await Task.Delay(1000);
+            Player.instance.lineRenderer.positionCount = 0;
         }
         ShootReflected = false;
     }

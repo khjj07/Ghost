@@ -50,7 +50,7 @@ public class Ghost : MonoBehaviour
         }
         else
         {
-            Debug.DrawLine(transform.position, direction * 10000f, Color.red);
+            Debug.DrawLine(transform.position, direction * 10000f, Color.red); 
         }
     }
 

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public class Define : MonoBehaviour
 {
-    public static float TileOffset = 1f;
+    public static float TileOffset = 0.3f;
 }
