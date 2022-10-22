@@ -24,7 +24,7 @@ public class Mirror : MonoBehaviour
         if (!Reflected && (direction==EnableVector1 || direction==EnableVector2))
         {
             direction = direction == EnableVector1 ? -EnableVector2 : -EnableVector1;
-            RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction / 2, direction);
+            RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);
             
             if (hit.collider && hit.collider.CompareTag("Mirror"))
             {
@@ -60,7 +60,7 @@ public class Mirror : MonoBehaviour
         if (!ShootReflected && (direction == EnableVector1 || direction == EnableVector2))
         {
             direction = direction == EnableVector1 ? -EnableVector2 : -EnableVector1;
-            RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction / 2, direction);
+            RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);
 
             if (hit.collider && hit.collider.CompareTag("Mirror"))
             {
@@ -90,7 +90,7 @@ public class Mirror : MonoBehaviour
             {
                 Debug.DrawLine(transform.position, direction * 10000f, Color.red);
                 Player.instance.lineRenderer.positionCount = count + 1;
-                Player.instance.lineRenderer.SetPosition(count, this.transform.localPosition + (Vector3)direction * 10f);
+                Player.instance.lineRenderer.SetPosition(count, this.transform.localPosition + (Vector3)direction * 10f * Define.TileOffset);
             }
             await Task.Delay(1000);
             Player.instance.lineRenderer.positionCount = 0;

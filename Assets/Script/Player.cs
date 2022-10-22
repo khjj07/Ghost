@@ -41,7 +41,7 @@ public class Player : Singleton<Player>
     }
     public async Task Pass(Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction / 2, direction);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);
         if (hit.collider && hit.collider.CompareTag("Mirror"))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
@@ -60,7 +60,7 @@ public class Player : Singleton<Player>
 
     public async void Sight()
     {
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction / 2, Direction);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction * Define.TileOffset / 2, Direction);
         if (hit.collider)
         {
             if (hit.collider.CompareTag("Mirror"))
@@ -86,7 +86,7 @@ public class Player : Singleton<Player>
     }
     public bool CheckFront()
     {
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction/2, Direction,Define.TileOffset/2);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction * Define.TileOffset / 2, Direction,Define.TileOffset/2);
         if (hit.collider && (hit.collider.CompareTag("Mirror") || hit.collider.CompareTag("Wall")))
             return false;
         else if (hit.collider && hit.collider.CompareTag("Door"))
@@ -117,7 +117,23 @@ public class Player : Singleton<Player>
     }
     public void Update()
     {
-       
+        if (Direction == Vector2.up)
+        {
+            animator.SetInteger("State", 1);
+        }
+        else if (Direction == Vector2.down)
+        {
+            animator.SetInteger("State", 2);
+        }
+        else if (Direction == Vector2.left)
+        {
+            animator.SetInteger("State", 3);
+        }
+        else if (Direction == Vector2.right)
+        {
+            animator.SetInteger("State", 4);
+        }
+        animator.SetBool("Walk", !Actable);
     }
 
     public async Task Dead()
@@ -129,6 +145,7 @@ public class Player : Singleton<Player>
     {
         Rotatable = false;
         Direction = direction;
+        animator.SetBool("Walk", true);
         await Task.Run(async () =>
         {
             await Task.Delay(ShortInputTime);
@@ -136,52 +153,19 @@ public class Player : Singleton<Player>
         });
     }
 
-    public async void Move(Vector2 direction)
+    public async Task Move(Vector2 direction)
     {
         Rotate(direction);
         if(CheckFront())
         {
-
-            if (Direction == Vector2.up && animator.GetInteger("State") != 1)
-            {
-                animator.SetInteger("State", 1);
-            }
-            else if (Direction == Vector2.down && animator.GetInteger("State") != 2)
-            {
-                animator.SetInteger("State", 2);
-            }
-            else if (Direction == Vector2.left && animator.GetInteger("State") != 3)
-            {
-                animator.SetInteger("State", 3);
-            }
-            else if (Direction == Vector2.right && animator.GetInteger("State") != 4)
-            {
-                animator.SetInteger("State", 4);
-            }
-
             Rotatable = false;
             Actable = false;
-            transform.DOMove(transform.position + Define.TileOffset * (Vector3)direction, MoveDuration);
+            transform.DOMove(transform.position + Define.TileOffset * (Vector3)direction, MoveDuration)
+                .OnComplete(() => {
+                    Actable = true;
+                    Rotatable = true;
+                });
             GameManager.instance.Step();
-            await Task.Delay((int)MoveDuration * 1000 + ShortInputTime);
-            Actable = true;
-            Rotatable = true;
-            if (Direction == Vector2.up && animator.GetInteger("State") != 5)
-            {
-                animator.SetInteger("State", 5);
-            }
-            else if (Direction == Vector2.down && animator.GetInteger("State") != 6)
-            {
-                animator.SetInteger("State", 6);
-            }
-            else if (Direction == Vector2.left && animator.GetInteger("State") != 7)
-            {
-                animator.SetInteger("State", 7);
-            }
-            else if (Direction == Vector2.right && animator.GetInteger("State") != 8)
-            {
-                animator.SetInteger("State", 8);
-            };
         }
         
     }
@@ -193,7 +177,7 @@ public class Player : Singleton<Player>
         int count = 2;
         lineRenderer.positionCount = count;
         lineRenderer.SetPosition(0, transform.localPosition);
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction/2, Direction);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position+ Direction * Define.TileOffset / 2, Direction);
         if (hit.collider && hit.collider.CompareTag("Mirror"))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
@@ -205,8 +189,7 @@ public class Player : Singleton<Player>
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
             lineRenderer.SetPosition(1, hit.transform.position);
-            await Task.Delay(1000);
-            lineRenderer.positionCount = 0;
+            await hit.collider.GetComponent<Ghost>().PassShoot(Direction, count);
         }
         else if (hit.collider && hit.collider.CompareTag("Door"))
         {
@@ -218,7 +201,7 @@ public class Player : Singleton<Player>
         else
         {
             Debug.DrawLine(transform.position, Direction * 10000f, Color.red);
-            lineRenderer.SetPosition(1, transform.localPosition + (Vector3)Direction * 10f);
+            lineRenderer.SetPosition(1, transform.localPosition + (Vector3)Direction * 10f * Define.TileOffset);
             await Task.Delay(1000);
             lineRenderer.positionCount = 0;
             

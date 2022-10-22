@@ -30,9 +30,40 @@ public class Ghost : MonoBehaviour
     {
         Debug.Log("Ghost dead");
     }
+
+    public async Task PassShoot(Vector2 direction,int count)
+    {
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);
+        if (hit.collider && hit.collider.CompareTag("Mirror"))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.red);
+            Player.instance.lineRenderer.positionCount = count + 1;
+            Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
+            await hit.collider.GetComponent<Mirror>().ReflectShoot(direction,++count);
+        }
+        else if (hit.collider && hit.collider.CompareTag("Ghost"))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.red);
+            Player.instance.lineRenderer.positionCount = count + 1;
+            Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
+            await hit.collider.GetComponent<Ghost>().PassShoot(direction, ++count);
+        }
+        else if (hit.collider && hit.collider.CompareTag("Player"))
+        {
+            Debug.DrawLine(transform.position, hit.point, Color.red);
+            Player.instance.lineRenderer.positionCount = count + 1;
+            Player.instance.lineRenderer.SetPosition(count, hit.transform.position);
+            await hit.collider.GetComponent<Player>().Dead();
+        }
+        else
+        {
+            Debug.DrawLine(transform.position, direction * 10000f, Color.red);
+        }
+    }
+
     public async Task Pass(Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction/2, direction);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);
         if (hit.collider && hit.collider.CompareTag("Mirror"))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
@@ -57,7 +88,7 @@ public class Ghost : MonoBehaviour
     public async Task Reveal(Vector2 direction)
     {
         Show();
-        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction / 2, direction);
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset/2, direction);
         if (hit.collider && hit.collider.CompareTag("Mirror"))
         {
             Debug.DrawLine(transform.position, hit.point, Color.red);
