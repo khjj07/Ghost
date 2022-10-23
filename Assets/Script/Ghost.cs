@@ -12,7 +12,6 @@ public class Ghost : MonoBehaviour
     public Vector2 Direction;
     void Start()
     {
-        transform.rotation = Quaternion.FromToRotation(Vector3.up, (Vector3)Direction);
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         //GameManager.instance.StepSubject.Subscribe(_ => Step());
         Hide();

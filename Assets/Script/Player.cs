@@ -37,8 +37,24 @@ public class Player : Singleton<Player>
         this.UpdateAsObservable()
            .Where(_ => Actable && Input.GetKeyDown(KeyCode.Space))
            .Subscribe(_ => Shoot());
-
+        this.UpdateAsObservable()
+         .Where(_ => Actable && Input.GetKeyDown(KeyCode.E) )
+         .Subscribe(_ => CheckMirror());
     }
+    public void CheckMirror()
+    {
+        Debug.Log("check");
+        RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + Direction * Define.TileOffset / 2, Direction, Define.TileOffset / 2);
+        if (hit.collider && hit.collider.CompareTag("Mirror"))
+        {
+            if(hit.collider.GetComponent<MirrorRotation>())
+            {
+                hit.collider.GetComponent<MirrorRotation>().Rotate();
+            }
+        }
+       
+    }
+
     public async Task Pass(Vector2 direction)
     {
         RaycastHit2D hit = Physics2D.Raycast((Vector2)transform.position + direction * Define.TileOffset / 2, direction);

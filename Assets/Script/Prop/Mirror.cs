@@ -90,7 +90,7 @@ public class Mirror : MonoBehaviour
             {
                 Debug.DrawLine(transform.position, direction * 10000f, Color.red);
                 Player.instance.lineRenderer.positionCount = count + 1;
-                Player.instance.lineRenderer.SetPosition(count, this.transform.localPosition + (Vector3)direction * 10f * Define.TileOffset);
+                Player.instance.lineRenderer.SetPosition(count, this.transform.position + (Vector3)direction * 10f * Define.TileOffset);
             }
             await Task.Delay(1000);
             Player.instance.lineRenderer.positionCount = 0;

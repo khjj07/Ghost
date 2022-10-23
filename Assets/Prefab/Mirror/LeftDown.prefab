@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9134557311133656545}
   - component: {fileID: 9134557311133656544}
   - component: {fileID: 9134557311133656547}
+  - component: {fileID: 1556025641}
   m_Layer: 0
   m_Name: LeftDown
   m_TagString: Mirror
@@ -129,3 +130,16 @@ MonoBehaviour:
   ShootReflected: 0
   EnableVector1: {x: 0, y: 1}
   EnableVector2: {x: 1, y: 0}
+--- !u!114 &1556025641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9134557311133656546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b886566e4ea498143a71c544f599a21e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 0}
