@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0198b7546fd184bbfefbc58bba5c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Normal: {x: -1, y: 0}
+  Normal: {x: 1, y: 0}
   Reflected: 0
   ShootReflected: 0
-  EnableVector1: {x: 1, y: 0}
-  EnableVector2: {x: 1, y: 0}
+  EnableVector1: {x: -1, y: 0}
+  EnableVector2: {x: -1, y: 0}

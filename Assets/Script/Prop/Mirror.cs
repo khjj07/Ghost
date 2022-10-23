@@ -37,7 +37,7 @@ public class Mirror : MonoBehaviour
                 Reflected = true;
                 Debug.DrawLine(transform.position, hit.point, Color.red);
                 if (-direction == hit.collider.GetComponent<Ghost>().Direction)
-                    hit.collider.GetComponent<Ghost>().Kill();
+                    hit.collider.GetComponent<Ghost>().Kill(transform.position);
                 else
                     await hit.collider.GetComponent<Ghost>().Reveal(direction.normalized);
             }

@@ -5,6 +5,8 @@ using UnityEngine;
 using System.Threading;
 using System.Threading.Tasks;
 using UniRx;
+using DG.Tweening;
+
 public class Ghost : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -20,10 +22,12 @@ public class Ghost : MonoBehaviour
     {
         Hide();
     }
-    public void Kill()
+    public void Kill(Vector3 position)
     {
         Show();
-        Debug.Log("kill");
+        transform.DOMove(position, 1f)
+            .SetEase(Ease.OutSine)
+            .OnComplete(() => { });
     }
     public async Task Dead()
     {

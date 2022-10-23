@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: cdbaceacd99874b4a96161e9d6b2f464, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.32, y: 0.32}
@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae0198b7546fd184bbfefbc58bba5c94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Normal: {x: 1, y: 0}
+  Normal: {x: -1, y: 0}
   Reflected: 0
   ShootReflected: 0
-  EnableVector1: {x: -1, y: 0}
-  EnableVector2: {x: -1, y: 0}
+  EnableVector1: {x: 1, y: 0}
+  EnableVector2: {x: 1, y: 0}
